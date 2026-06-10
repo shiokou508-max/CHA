@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK 3800 - 中国語単語学習</title>
+    <meta name="description" content="HSK 3800語を高速反復で覚える中国語単語学習アプリ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ============ SVG SPRITE (オリジナルアイコン定義) ============ -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+        <defs>
+            <linearGradient id="mkBody" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FFB347" />
+                <stop offset="100%" stop-color="#FF8A00" />
+            </linearGradient>
+            <linearGradient id="mkLeaf" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#8BC34A" />
+                <stop offset="100%" stop-color="#558B2F" />
+            </linearGradient>
+            <linearGradient id="gradOrange" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FF9E40" />
+                <stop offset="100%" stop-color="#FF6D00" />
+            </linearGradient>
+        </defs>
+
+        <!-- タブ: ホーム -->
+        <symbol id="i-home" viewBox="0 0 24 24">
+            <path d="M3 10.5 12 3l9 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.5 9.5V20a1 1 0 0 0 1 1H10v-5.5a2 2 0 0 1 4 0V21h3.5a1 1 0 0 0 1-1V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- タブ: ピンイン -->
+        <symbol id="i-pinyin" viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+            <text x="12" y="16.2" text-anchor="middle" font-size="10.5" font-weight="800" fill="currentColor" stroke="none" font-family="'Noto Sans JP',sans-serif">拼</text>
+        </symbol>
+        <!-- タブ: 学習データ -->
+        <symbol id="i-chart" viewBox="0 0 24 24">
+            <path d="M4 20V10M10 20V4M16 20v-8M21 20H3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- タブ: その他 -->
+        <symbol id="i-dots" viewBox="0 0 24 24">
+            <circle cx="5" cy="12" r="2" fill="currentColor"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+            <circle cx="19" cy="12" r="2" fill="currentColor"/>
+        </symbol>
+        <!-- 炎 (連続記録) -->
+        <symbol id="i-flame" viewBox="0 0 24 24">
+            <path d="M12 2c.6 3.5-1.2 5.2-2.8 6.9C7.6 10.6 6 12.3 6 15a6 6 0 0 0 12 0c0-2.2-.9-3.8-2-5.2-.4 1-.9 1.7-1.8 2.2.3-3.7-.8-7.6-2.2-10z" fill="currentColor"/>
+            <path d="M12 21a3.2 3.2 0 0 1-3.2-3.2c0-1.5.9-2.4 1.8-3.3.6-.6 1.1-1.2 1.4-2 1.4 1.2 3.2 3 3.2 5.3A3.2 3.2 0 0 1 12 21z" fill="#FFD180"/>
+        </symbol>
+        <!-- 本 (未学習) -->
+        <symbol id="i-book" viewBox="0 0 24 24">
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5A2.5 2.5 0 0 1 4 20.5zM8 7.5h8M8 11h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- 反復矢印 (総復習) -->
+        <symbol id="i-refresh" viewBox="0 0 24 24">
+            <path d="M4 12a8 8 0 0 1 13.7-5.7L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.7 5.7L4 15.5M4 20v-4.5h4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- ダンベル (苦手) -->
+        <symbol id="i-dumbbell" viewBox="0 0 24 24">
+            <path d="M7 9v6M4.5 10v4M17 9v6M19.5 10v4M7 12h10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </symbol>
+        <!-- 脳 (忘却曲線) -->
+        <symbol id="i-brain" viewBox="0 0 24 24">
+            <path d="M9.5 4A2.7 2.7 0 0 0 7 6.5 3.2 3.2 0 0 0 4.5 10c0 .8.2 1.4.6 2A3.4 3.4 0 0 0 4 14.6 3.4 3.4 0 0 0 7.4 18c.3 1.4 1.2 2.5 2.8 2.5 1 0 1.8-.6 1.8-1.8V5.8C12 4.7 11 4 9.5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M14.5 4A2.7 2.7 0 0 1 17 6.5 3.2 3.2 0 0 1 19.5 10c0 .8-.2 1.4-.6 2a3.4 3.4 0 0 1 1.1 2.6A3.4 3.4 0 0 1 16.6 18c-.3 1.4-1.2 2.5-2.8 2.5-1 0-1.8-.6-1.8-1.8V5.8C12 4.7 13 4 14.5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </symbol>
+        <!-- スピーカー -->
+        <symbol id="i-sound" viewBox="0 0 24 24">
+            <path d="M4 9.5h3L12 5v14l-5-4.5H4z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- カード -->
+        <symbol id="i-cards" viewBox="0 0 24 24">
+            <rect x="3" y="6" width="13" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M8.5 3.5 19 3a2 2 0 0 1 2 2l-.4 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 11h5M7 15h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- ノート (My単語帳) -->
+        <symbol id="i-note" viewBox="0 0 24 24">
+            <rect x="5" y="3" width="15" height="18" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M9 8h7M9 12h7M9 16h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 7h-1.5M5 12H3.5M5 17H3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- ゴミ箱 -->
+        <symbol id="i-trash" viewBox="0 0 24 24">
+            <path d="M4 7h16M9.5 4h5M7 7l1 13.2a1.5 1.5 0 0 0 1.5 1.3h5a1.5 1.5 0 0 0 1.5-1.3L17 7M10 11v6M14 11v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- 情報 -->
+        <symbol id="i-info" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="8" r="1.3" fill="currentColor"/>
+        </symbol>
+        <!-- チェック -->
+        <symbol id="i-check" viewBox="0 0 24 24">
+            <path d="M5 12.5 10 18 19 6.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- バツ -->
+        <symbol id="i-x" viewBox="0 0 24 24">
+            <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        </symbol>
+        <!-- 丸 (知ってる) -->
+        <symbol id="i-circle" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2.6"/>
+        </symbol>
+        <!-- タップ指 -->
+        <symbol id="i-tap" viewBox="0 0 24 24">
+            <path d="M9 11.5V5.8a1.8 1.8 0 0 1 3.6 0v5l3.8.9a2.4 2.4 0 0 1 1.8 2.6l-.5 3.7a3 3 0 0 1-3 2.6h-3a3.4 3.4 0 0 1-2.6-1.2L6 16.2a1.6 1.6 0 0 1 2.3-2.2l.7.6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M7.5 4.5a4.6 4.6 0 0 1 6.6-.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </symbol>
+        <!-- トロフィー -->
+        <symbol id="i-trophy" viewBox="0 0 24 24">
+            <path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M7 5H4.5v1.5A3.5 3.5 0 0 0 8 10M17 5h2.5v1.5A3.5 3.5 0 0 1 16 10M12 14v3.5M8.5 20.5h7M12 17.5c-1.8 0-2.5 1.2-2.6 3h5.2c-.1-1.8-.8-3-2.6-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- 的 (レベル診断) -->
+        <symbol id="i-target" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4.8" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
+        </symbol>
+        <!-- 時計 -->
+        <symbol id="i-clock" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 7.5V12l3.2 2.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- 鉛筆 -->
+        <symbol id="i-pencil" viewBox="0 0 24 24">
+            <path d="m14.5 5 4.5 4.5L8.5 20H4v-4.5zM12.8 6.7l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <!-- キラキラ -->
+        <symbol id="i-spark" viewBox="0 0 24 24">
+            <path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.8L12 18.2l-1.8-5.6L4.5 10.8 10.2 9z" fill="currentColor"/>
+            <path d="M19 16.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="currentColor" opacity="0.7"/>
+        </symbol>
+        <!-- 声調波形 -->
+        <symbol id="i-tone" viewBox="0 0 24 24">
+            <path d="M3 14c2.5 0 2.5-6 5-6s2.5 8 5 8 2.5-10 5-10 2.5 6 3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 20h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+        </symbol>
+        <!-- 表グリッド -->
+        <symbol id="i-grid" viewBox="0 0 24 24">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M3.5 9.2h17M3.5 14.9h17M9.2 3.5v17M14.9 3.5v17" stroke="currentColor" stroke-width="1.6"/>
+        </symbol>
+        <!-- 設定歯車 -->
+        <symbol id="i-gear" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 3.5v2.4M12 18.1v2.4M3.5 12h2.4M18.1 12h2.4M6 6l1.7 1.7M16.3 16.3 18 18M18 6l-1.7 1.7M7.7 16.3 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+        <!-- 矢印右 -->
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+            <path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+    </svg>
+
+    <div id="app">
+        <!-- HOME VIEW -->
+        <div id="view-home" class="view active">
+            <div class="home-header">
+                <div class="home-logo">
+                    <span class="logo-icon" id="logo-mascot" aria-hidden="true"></span>
+                    <h1>HSK 3800</h1>
+                </div>
+                <div class="home-streak" id="home-streak">
+                    <svg class="i streak-fire" aria-hidden="true"><use href="#i-flame"/></svg>
+                    <span class="streak-count" id="streak-count">0</span>
+                    <span class="streak-label">日連続</span>
+                </div>
+            </div>
+            <div class="user-title-bar">
+                <svg class="i title-medal" aria-hidden="true"><use href="#i-trophy"/></svg>
+                <span id="user-title">中国語ビギナー</span>
+            </div>
+            <div class="home-mascot">
+                <div class="mascot-bubble" id="mascot-message">今日も頑張ろう！</div>
+                <div class="mascot-icon" id="home-mascot-icon"></div>
+            </div>
+            <div class="home-progress-card" id="home-progress-card">
+                <div class="progress-title" id="current-book-title">HSK 3800</div>
+                <div class="progress-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-learned">0</span>
+                        <span class="stat-label">覚えた</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-words">0</span>
+                        <span class="stat-label">全単語</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="today-count">0</span>
+                        <span class="stat-label">今日</span>
+                    </div>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar" id="home-progress-bar">
+                        <div class="progress-fill" id="home-progress-fill"></div>
+                    </div>
+                    <span class="progress-pct" id="home-progress-pct">0%</span>
+                </div>
+                <button class="btn-today" onclick="startTodaySession()">
+                    <svg class="i" aria-hidden="true"><use href="#i-spark"/></svg>
+                    今日の学習をはじめる
+                </button>
+            </div>
+            <div class="home-actions">
+                <button class="action-btn action-unlearned" onclick="startQuickSession('unlearned')">
+                    <span class="action-icon"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span>
+                    <span class="action-text">未学習</span>
+                    <span class="action-count" id="count-unlearned">0</span>
+                </button>
+                <button class="action-btn action-review" onclick="startQuickSession('review')">
+                    <span class="action-icon"><svg class="i" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+                    <span class="action-text">総復習</span>
+                    <span class="action-count" id="count-review">0</span>
+                </button>
+                <button class="action-btn action-weak" onclick="startQuickSession('weak')">
+                    <span class="action-icon"><svg class="i" aria-hidden="true"><use href="#i-dumbbell"/></svg></span>
+                    <span class="action-text">苦手</span>
+                    <span class="action-count" id="count-weak">0</span>
+                </button>
+                <button class="action-btn action-due" onclick="startQuickSession('due')">
+                    <span class="action-icon"><svg class="i" aria-hidden="true"><use href="#i-brain"/></svg></span>
+                    <span class="action-text">忘却曲線</span>
+                    <span class="action-count" id="count-due">0</span>
+                </button>
+            </div>
+            <div class="home-course-btn">
+                <button class="btn-select-course" onclick="showView('view-courses')">
+                    教材を選ぶ
+                    <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- COURSE SELECT VIEW -->
+        <div id="view-courses" class="view">
+            <div class="view-header">
+                <button class="btn-back" onclick="showView('view-home')">←</button>
+                <h2>教材一覧</h2>
+                <div class="spacer"></div>
+            </div>
+            <div class="courses-list" id="courses-list"></div>
+        </div>
+
+        <!-- SECTION SELECT VIEW -->
+        <div id="view-sections" class="view">
+            <div class="view-header">
+                <button class="btn-back" onclick="showView('view-courses')">←</button>
+                <h2 id="sections-title">Rank 1</h2>
+                <div class="spacer"></div>
+            </div>
+            <div class="sections-list" id="sections-list"></div>
+        </div>
+
+        <!-- MODE SELECT VIEW -->
+        <div id="view-mode" class="view">
+            <div class="mode-top">
+                <button class="btn-close-mode" onclick="goBackFromMode()" aria-label="閉じる">
+                    <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+                <div class="mode-ring-wrap">
+                    <svg viewBox="0 0 120 120" class="mode-ring-svg">
+                        <circle cx="60" cy="60" r="52" class="mode-ring-bg" />
+                        <circle cx="60" cy="60" r="52" class="mode-ring-fill" id="mode-ring-fill" />
+                    </svg>
+                    <div class="mode-ring-center" id="mode-ring-center">0%</div>
+                </div>
+                <div class="mode-title" id="mode-title">学習セッション</div>
+                <div class="mode-chips" id="mode-chips"></div>
+            </div>
+
+            <div class="mode-config">
+                <div class="mode-config-row">
+                    <div class="mode-config-label">学習モード</div>
+                    <div class="mode-seg" id="mode-seg-learn">
+                        <button class="mode-seg-btn" data-learn="quiz" onclick="selectLearnMode('quiz')">4択</button>
+                        <button class="mode-seg-btn" data-learn="card" onclick="selectLearnMode('card')">カード</button>
+                    </div>
+                </div>
+                <div class="mode-config-row" id="mode-format-row">
+                    <div class="mode-config-label">出題形式</div>
+                    <div class="mode-seg" id="mode-seg-format">
+                        <button class="mode-seg-btn" data-format="zh2ja" onclick="selectFormat('zh2ja')">中日</button>
+                        <button class="mode-seg-btn" data-format="ja2zh" onclick="selectFormat('ja2zh')">日中</button>
+                        <button class="mode-seg-btn" data-format="listening" onclick="selectFormat('listening')">リスニング</button>
+                    </div>
+                </div>
+                <div class="mode-toggle-row" id="mode-anki-row">
+                    <div class="mode-toggle-text">
+                        <span><svg class="i" aria-hidden="true"><use href="#i-note"/></svg> 暗記シート</span>
+                        <small>選択肢を隠して自分で想起</small>
+                    </div>
+                    <button class="mode-switch" id="mode-anki-switch" onclick="toggleAnkisheet()" role="switch" aria-checked="false">
+                        <span class="mode-switch-knob"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mode-start-wrap">
+                <button class="btn-mode-start" onclick="startFromModeSelect()">スタート</button>
+            </div>
+        </div>
+
+        <!-- QUIZ VIEW -->
+        <div id="view-quiz" class="view">
+            <div class="judge-flash" id="judge-flash"></div>
+            <div class="quiz-session-bar">
+                <div class="quiz-session-fill" id="quiz-session-fill"></div>
+            </div>
+            <div class="quiz-header">
+                <button class="btn-back quiz-exit" onclick="confirmExitQuiz()" aria-label="終了">
+                    <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+                <div class="quiz-progress">
+                    <span id="quiz-current">1</span> / <span id="quiz-total">10</span>
+                </div>
+                <span class="quiz-mode-label" id="quiz-mode-label"></span>
+                <div class="quiz-timer-bar">
+                    <div class="quiz-timer-fill" id="quiz-timer-fill"></div>
+                </div>
+            </div>
+            <div class="quiz-streak-badge" id="quiz-streak-badge"></div>
+            <div class="quiz-word-area">
+                <div class="quiz-word" id="quiz-word">word</div>
+                <div class="quiz-pinyin" id="quiz-pinyin"></div>
+                <button class="btn-speak" id="quiz-speak" onclick="speakCurrentWord()" aria-label="発音を聞く">
+                    <svg class="i" aria-hidden="true"><use href="#i-sound"/></svg>
+                </button>
+            </div>
+            <div class="quiz-options" id="quiz-options"></div>
+            <div class="ankisheet-reveal-area" id="ankisheet-reveal-area" style="display:none;">
+                <div class="ankisheet-tap" id="ankisheet-tap">
+                    <svg class="i" aria-hidden="true"><use href="#i-tap"/></svg>
+                    <span>タップして答えを確認</span>
+                </div>
+                <div class="ankisheet-answer" id="ankisheet-answer" style="display:none;"></div>
+                <div class="ankisheet-grade" id="ankisheet-grade" style="display:none;">
+                    <button class="ankisheet-btn ankisheet-didnt" id="ankisheet-didnt">
+                        <svg class="i" aria-hidden="true"><use href="#i-x"/></svg> 覚えてない
+                    </button>
+                    <button class="ankisheet-btn ankisheet-knew" id="ankisheet-knew">
+                        <svg class="i" aria-hidden="true"><use href="#i-circle"/></svg> 覚えた
+                    </button>
+                </div>
+            </div>
+            <div class="quiz-skip">
+                <button class="btn-skip" id="btn-skip" onclick="skipWord()">SKIP</button>
+            </div>
+        </div>
+
+        <!-- CARD FLIP VIEW -->
+        <div id="view-card" class="view">
+            <div class="judge-flash" id="judge-flash-card"></div>
+            <div class="quiz-session-bar">
+                <div class="quiz-session-fill" id="card-session-fill"></div>
+            </div>
+            <div class="card-header">
+                <button class="btn-back quiz-exit" onclick="confirmExitQuiz()" aria-label="終了">
+                    <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+                <div class="card-progress">
+                    <span id="card-current">1</span> / <span id="card-total">10</span>
+                </div>
+                <div class="card-remaining">
+                    残り: <span id="card-remaining-count">0</span>
+                </div>
+            </div>
+            <div class="card-area">
+                <div class="flip-card" id="flip-card">
+                    <div class="swipe-label swipe-label-known" id="swipe-label-known">知ってる</div>
+                    <div class="swipe-label swipe-label-unknown" id="swipe-label-unknown">わからない</div>
+                    <div class="flip-card-inner" id="flip-card-inner">
+                        <div class="flip-card-front">
+                            <button class="btn-speak btn-speak-card" onclick="event.stopPropagation(); speakCardWord()" aria-label="発音を聞く">
+                                <svg class="i" aria-hidden="true"><use href="#i-sound"/></svg>
+                            </button>
+                            <div class="card-word" id="card-word">word</div>
+                            <div class="card-pinyin" id="card-pinyin"></div>
+                            <div class="card-hint">タップで意味 / 左右スワイプで仕分け</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="card-pinyin card-pinyin-back" id="card-pinyin-back"></div>
+                            <div class="card-meaning" id="card-meaning">意味</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-actions" id="card-actions">
+                <button class="card-btn card-unknown" onclick="cardAnswer(false)">
+                    <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+                    <span>わからない</span>
+                </button>
+                <button class="card-btn card-known" onclick="cardAnswer(true)">
+                    <svg class="i" aria-hidden="true"><use href="#i-circle"/></svg>
+                    <span>知ってる</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- PINYIN TAB VIEW -->
+        <div id="view-pinyin" class="view">
+            <div class="py-header">
+                <h2>ピンイン学習</h2>
+                <p class="py-sub">発音の基礎をマスターしよう</p>
+            </div>
+            <div class="py-mascot-row">
+                <div class="py-mascot" id="py-mascot-icon"></div>
+                <div class="py-bubble" id="py-bubble">声調がわかると<br>聞き取りがグッと楽になるよ！</div>
+            </div>
+            <div class="py-menu">
+                <button class="py-menu-card" onclick="startPinyinQuiz('tone')">
+                    <span class="py-menu-icon py-icon-tone"><svg class="i" aria-hidden="true"><use href="#i-tone"/></svg></span>
+                    <span class="py-menu-body">
+                        <span class="py-menu-title">声調クイズ</span>
+                        <span class="py-menu-desc">音声を聞いて声調を当てる</span>
+                        <span class="py-menu-stat" id="py-stat-tone">正答率 --%</span>
+                    </span>
+                    <svg class="i py-menu-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </button>
+                <button class="py-menu-card" onclick="startPinyinQuiz('choice')">
+                    <span class="py-menu-icon py-icon-choice"><svg class="i" aria-hidden="true"><use href="#i-cards"/></svg></span>
+                    <span class="py-menu-body">
+                        <span class="py-menu-title">ピンイン4択</span>
+                        <span class="py-menu-desc">漢字を見て正しいピンインを選ぶ</span>
+                        <span class="py-menu-stat" id="py-stat-choice">正答率 --%</span>
+                    </span>
+                    <svg class="i py-menu-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </button>
+                <button class="py-menu-card" onclick="showPinyinChart()">
+                    <span class="py-menu-icon py-icon-chart"><svg class="i" aria-hidden="true"><use href="#i-grid"/></svg></span>
+                    <span class="py-menu-body">
+                        <span class="py-menu-title">発音表</span>
+                        <span class="py-menu-desc">声調・声母・韻母をタップで発音</span>
+                        <span class="py-menu-stat">音声つき一覧表</span>
+                    </span>
+                    <svg class="i py-menu-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- PINYIN QUIZ VIEW -->
+        <div id="view-pyquiz" class="view">
+            <div class="judge-flash" id="judge-flash-py"></div>
+            <div class="quiz-session-bar">
+                <div class="quiz-session-fill" id="pyquiz-session-fill"></div>
+            </div>
+            <div class="quiz-header">
+                <button class="btn-back quiz-exit" onclick="confirmExitPinyin()" aria-label="終了">
+                    <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+                </button>
+                <div class="quiz-progress">
+                    <span id="pyquiz-current">1</span> / <span id="pyquiz-total">10</span>
+                </div>
+                <span class="quiz-mode-label" id="pyquiz-label"></span>
+                <div class="quiz-timer-bar">
+                    <div class="quiz-timer-fill" id="pyquiz-timer-fill"></div>
+                </div>
+            </div>
+            <div class="quiz-word-area pyquiz-word-area">
+                <div class="pyquiz-question" id="pyquiz-question">この単語の声調は？</div>
+                <div class="quiz-word pyquiz-word" id="pyquiz-word">你</div>
+                <div class="pyquiz-sub" id="pyquiz-sub"></div>
+                <button class="btn-speak" id="pyquiz-speak" onclick="speakPinyinQuizWord()" aria-label="発音を聞く">
+                    <svg class="i" aria-hidden="true"><use href="#i-sound"/></svg>
+                </button>
+            </div>
+            <div class="quiz-options pyquiz-options" id="pyquiz-options"></div>
+        </div>
+
+        <!-- PINYIN CHART VIEW -->
+        <div id="view-pychart" class="view">
+            <div class="view-header">
+                <button class="btn-back" onclick="switchTab('view-pinyin')">←</button>
+                <h2>発音表</h2>
+                <div class="spacer"></div>
+            </div>
+            <div class="pychart-tabs" id="pychart-tabs">
+                <button class="pychart-tab active" data-chart="tones" onclick="switchPinyinChart('tones')">声調</button>
+                <button class="pychart-tab" data-chart="initials" onclick="switchPinyinChart('initials')">声母</button>
+                <button class="pychart-tab" data-chart="finals" onclick="switchPinyinChart('finals')">韻母</button>
+            </div>
+            <p class="pychart-hint">セルをタップすると例字の発音が流れます</p>
+            <div class="pychart-content" id="pychart-content"></div>
+        </div>
+
+        <!-- RESULTS VIEW -->
+        <div id="view-results" class="view">
+            <div class="results-header">
+                <div class="results-mascot" id="results-mascot"></div>
+                <div class="results-praise" id="results-praise">よくできました！</div>
+            </div>
+            <div class="results-score-ring">
+                <svg viewBox="0 0 120 120" class="score-ring-svg">
+                    <circle cx="60" cy="60" r="52" class="score-ring-bg" />
+                    <circle cx="60" cy="60" r="52" class="score-ring-fill" id="score-ring-fill" />
+                </svg>
+                <div class="score-text" id="score-text">0%</div>
+            </div>
+            <div class="results-stats">
+                <div class="result-stat">
+                    <span class="result-stat-num" id="result-correct">0</span>
+                    <span class="result-stat-label">正解</span>
+                </div>
+                <div class="result-stat">
+                    <span class="result-stat-num" id="result-wrong">0</span>
+                    <span class="result-stat-label">不正解</span>
+                </div>
+                <div class="result-stat">
+                    <span class="result-stat-num" id="result-time">0s</span>
+                    <span class="result-stat-label">学習時間</span>
+                </div>
+            </div>
+            <div class="results-word-list" id="results-word-list"></div>
+            <div class="results-actions">
+                <button class="result-btn btn-retry" onclick="retrySession()">もう一度</button>
+                <button class="result-btn btn-weak-review" id="btn-weak-review" onclick="reviewWeak()">苦手だけ復習</button>
+                <button class="result-btn btn-next" id="btn-next-section" onclick="nextSection()">次のセクションへ</button>
+                <button class="result-btn btn-home" onclick="showView('view-home');updateHomeStats();">ホームへ戻る</button>
+            </div>
+        </div>
+
+        <!-- PLACEMENT TEST VIEW -->
+        <div id="view-placement" class="view">
+            <div class="placement-content">
+                <div class="placement-mascot" id="placement-mascot"></div>
+                <h2>はじめまして！</h2>
+                <p>まずはレベル診断テストで<br>あなたにぴったりの<br>スタート地点を見つけよう！</p>
+                <p class="placement-detail">各ランクから5問ずつ、計20問</p>
+                <button class="btn-placement-start" onclick="startPlacementTest()">診断テスト開始</button>
+                <button class="btn-placement-skip" onclick="skipPlacementTest()">スキップしてRank 1から始める</button>
+            </div>
+        </div>
+
+        <!-- LEARNING DATA VIEW -->
+        <div id="view-data" class="view">
+            <div class="view-header">
+                <button class="btn-back" onclick="showView('view-home')">←</button>
+                <h2>学習データ</h2>
+                <div class="spacer"></div>
+            </div>
+            <div class="data-title-card">
+                <svg class="i" aria-hidden="true"><use href="#i-trophy"/></svg>
+                <span id="data-title">中国語ビギナー</span>
+            </div>
+            <div class="data-cards">
+                <div class="data-card streak-card">
+                    <div class="data-card-icon icon-fire"><svg class="i" aria-hidden="true"><use href="#i-flame"/></svg></div>
+                    <div class="data-card-value" id="data-streak">0</div>
+                    <div class="data-card-label">連続学習日数</div>
+                </div>
+                <div class="data-card words-card">
+                    <div class="data-card-icon icon-book"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></div>
+                    <div class="data-card-value" id="data-total-learned">0</div>
+                    <div class="data-card-label">覚えた単語数</div>
+                </div>
+                <div class="data-card sessions-card">
+                    <div class="data-card-icon icon-pencil"><svg class="i" aria-hidden="true"><use href="#i-pencil"/></svg></div>
+                    <div class="data-card-value" id="data-sessions">0</div>
+                    <div class="data-card-label">学習セッション</div>
+                </div>
+                <div class="data-card time-card">
+                    <div class="data-card-icon icon-clock"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg></div>
+                    <div class="data-card-value" id="data-time">0分</div>
+                    <div class="data-card-label">総学習時間</div>
+                </div>
+            </div>
+            <div class="data-mastery-chart">
+                <h3>習熟度分布</h3>
+                <div class="mastery-bars" id="mastery-bars"></div>
+                <div class="mastery-legend">
+                    <span class="legend-item legend-perfect"><i class="dot dot-perfect"></i>完璧に覚えた</span>
+                    <span class="legend-item legend-almost"><i class="dot dot-almost"></i>ほぼ覚えた</span>
+                    <span class="legend-item legend-vague"><i class="dot dot-vague"></i>うろ覚え</span>
+                    <span class="legend-item legend-weak"><i class="dot dot-weak"></i>苦手</span>
+                    <span class="legend-item legend-unlearned"><i class="dot dot-unlearned"></i>未学習</span>
+                </div>
+            </div>
+            <div class="data-weekly">
+                <h3>今週の学習</h3>
+                <div class="weekly-chart" id="weekly-chart"></div>
+            </div>
+        </div>
+
+        <!-- SETTINGS VIEW -->
+        <div id="view-settings" class="view">
+            <div class="view-header">
+                <button class="btn-back" onclick="showView('view-home')">←</button>
+                <h2>その他</h2>
+                <div class="spacer"></div>
+            </div>
+            <div class="settings-section-title">出題設定</div>
+            <div class="setting-stepper-card">
+                <div class="setting-stepper-row">
+                    <span class="setting-stepper-label"><svg class="i" aria-hidden="true"><use href="#i-pencil"/></svg> 4択の問題数</span>
+                    <div class="setting-stepper">
+                        <button class="stepper-btn" onclick="changeSetting('quizCount', -1)">−</button>
+                        <span class="stepper-value"><span id="set-quiz-count">10</span><small>問</small></span>
+                        <button class="stepper-btn" onclick="changeSetting('quizCount', 1)">＋</button>
+                    </div>
+                </div>
+                <div class="setting-stepper-row">
+                    <span class="setting-stepper-label"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg> 制限時間</span>
+                    <div class="setting-stepper">
+                        <button class="stepper-btn" onclick="changeSetting('quizTime', -1)">−</button>
+                        <span class="stepper-value"><span id="set-quiz-time">6</span><small>秒</small></span>
+                        <button class="stepper-btn" onclick="changeSetting('quizTime', 1)">＋</button>
+                    </div>
+                </div>
+                <div class="setting-stepper-row">
+                    <span class="setting-stepper-label"><svg class="i" aria-hidden="true"><use href="#i-cards"/></svg> カードの枚数</span>
+                    <div class="setting-stepper">
+                        <button class="stepper-btn" onclick="changeSetting('cardCount', -1)">−</button>
+                        <span class="stepper-value"><span id="set-card-count">10</span><small>枚</small></span>
+                        <button class="stepper-btn" onclick="changeSetting('cardCount', 1)">＋</button>
+                    </div>
+                </div>
+                <div class="setting-stepper-row">
+                    <span class="setting-stepper-label"><svg class="i" aria-hidden="true"><use href="#i-sound"/></svg> 音声の速さ</span>
+                    <div class="setting-stepper">
+                        <button class="stepper-btn" onclick="changeSetting('speechRate', -1)">−</button>
+                        <span class="stepper-value"><span id="set-speech-rate">85</span><small>%</small></span>
+                        <button class="stepper-btn" onclick="changeSetting('speechRate', 1)">＋</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section-title">その他</div>
+            <div class="settings-list">
+                <div class="settings-item" onclick="showView('view-mywords');renderMyWords();">
+                    <svg class="i" aria-hidden="true"><use href="#i-note"/></svg>
+                    <span>My単語帳</span>
+                </div>
+                <div class="settings-item" onclick="startQuickSession('mywords')">
+                    <svg class="i" aria-hidden="true"><use href="#i-book"/></svg>
+                    <span>My単語帳で学習</span>
+                </div>
+                <div class="settings-item" onclick="resetProgress()">
+                    <svg class="i" aria-hidden="true"><use href="#i-trash"/></svg>
+                    <span>学習データをリセット</span>
+                </div>
+                <div class="settings-item info">
+                    <svg class="i" aria-hidden="true"><use href="#i-info"/></svg>
+                    <span>HSK 3800 中国語単語学習アプリ</span>
+                </div>
+                <div class="settings-item info">
+                    <svg class="i" aria-hidden="true"><use href="#i-book"/></svg>
+                    <span>全4ランク / 約3800語収録</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MY WORDS VIEW -->
+        <div id="view-mywords" class="view">
+            <div class="view-header">
+                <button class="btn-back" onclick="showView('view-settings')">←</button>
+                <h2>My単語帳</h2>
+                <div class="spacer"></div>
+            </div>
+            <div class="mywords-form">
+                <input type="text" id="myword-input-en" placeholder="中国語 (例: 你好)">
+                <input type="text" id="myword-input-jp" placeholder="意味 (例: こんにちは)">
+                <button class="btn-add-word" onclick="addMyWordFromForm()">追加</button>
+            </div>
+            <div class="mywords-list" id="mywords-list"></div>
+        </div>
+
+        <!-- RANK UP TEST VIEW -->
+        <div id="view-rankup" class="view">
+            <div class="rankup-overlay" id="rankup-overlay">
+                <div class="rankup-content">
+                    <div class="rankup-mascot" id="rankup-mascot"></div>
+                    <h2 id="rankup-title">ランクアップテスト</h2>
+                    <p id="rankup-desc">全問正解でクリア！</p>
+                    <button class="btn-rankup-start" id="btn-rankup-start">テスト開始</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MILESTONE CELEBRATION OVERLAY -->
+        <div class="milestone-overlay" id="milestone-overlay" style="display:none;">
+            <div class="milestone-content">
+                <div class="milestone-mascot" id="milestone-mascot"></div>
+                <h2>おめでとう！</h2>
+                <p><span id="milestone-count">0</span> 単語達成！</p>
+                <p id="milestone-title" class="milestone-title-text"></p>
+                <button class="btn-milestone-close" id="milestone-close">続ける</button>
+            </div>
+        </div>
+
+        <!-- BOTTOM TAB BAR -->
+        <nav class="tab-bar" id="tab-bar">
+            <button class="tab active" data-view="view-home" onclick="switchTab('view-home')">
+                <svg class="i tab-icon" aria-hidden="true"><use href="#i-home"/></svg>
+                <span class="tab-label">ホーム</span>
+            </button>
+            <button class="tab" data-view="view-pinyin" onclick="switchTab('view-pinyin')">
+                <svg class="i tab-icon" aria-hidden="true"><use href="#i-pinyin"/></svg>
+                <span class="tab-label">ピンイン</span>
+            </button>
+            <button class="tab" data-view="view-data" onclick="switchTab('view-data')">
+                <svg class="i tab-icon" aria-hidden="true"><use href="#i-chart"/></svg>
+                <span class="tab-label">学習データ</span>
+            </button>
+            <button class="tab" data-view="view-settings" onclick="switchTab('view-settings')">
+                <svg class="i tab-icon" aria-hidden="true"><use href="#i-dots"/></svg>
+                <span class="tab-label">その他</span>
+            </button>
+        </nav>
+
+        <!-- CONFETTI -->
+        <div id="confetti-container"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script src="pinyin.js"></script>
+</body>
+
+</html>
