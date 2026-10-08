@@ -1,0 +1,35 @@
+{
+  "id": "./",
+  "name": "やめログ — やめたい習慣を、今日もやめている。",
+  "short_name": "やめログ",
+  "description": "お酒・タバコ・SNSなど、やめたい習慣をやめ続けるための習慣カウンター。毎日の誓い、マイルストーン、衝動SOS、日記。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f7f6",
+  "theme_color": "#f4f7f6",
+  "categories": ["health", "lifestyle", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "衝動SOS",
+      "short_name": "SOS",
+      "description": "つらい時の呼吸ガイドと、やめる理由",
+      "url": "./#/sos",
+      "icons": [{ "src": "icons/sos-96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "日記を書く",
+      "short_name": "日記",
+      "url": "./#/journal"
+    }
+  ]
+}

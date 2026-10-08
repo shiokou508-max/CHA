@@ -1,0 +1,12 @@
+{
+  "name": "yamelog",
+  "version": "1.0.0",
+  "private": true,
+  "description": "やめログ — やめたい習慣を断つためのPWA",
+  "type": "module",
+  "scripts": {
+    "start": "npx -y serve -l 4173 .",
+    "test": "node --test tests/*.test.js",
+    "test:e2e": "node tests/e2e.mjs"
+  }
+}
