@@ -182,12 +182,12 @@ yamelog/
 
 ## 7. PWA 要件チェックリスト
 
-- [ ] `manifest.webmanifest`（name / short_name / start_url / scope / display: standalone / theme_color / icons 192・512・maskable / shortcuts）
-- [ ] `apple-touch-icon`（180px PNG）と iOS 用 meta タグ（`apple-mobile-web-app-capable` 等）
-- [ ] Service Worker 登録、アプリシェルのプリキャッシュ、古いキャッシュの削除
-- [ ] 新バージョン検知時に「更新」トーストを表示
-- [ ] オフラインで再読み込みしても起動できる
-- [ ] HTTPS 配信（GitHub Pages 等）
+- [x] `manifest.webmanifest`（name / short_name / start_url / scope / display: standalone / theme_color / icons 192・512・maskable / shortcuts）
+- [x] `apple-touch-icon`（180px PNG）と iOS 用 meta タグ（`apple-mobile-web-app-capable` 等）
+- [x] Service Worker 登録、アプリシェルのプリキャッシュ、古いキャッシュの削除
+- [x] 新バージョン検知時に「更新」トーストを表示
+- [x] オフラインで再読み込みしても起動できる
+- [x] HTTPS 配信（GitHub Pages 等）
 
 ---
 
